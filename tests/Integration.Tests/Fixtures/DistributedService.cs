@@ -11,6 +11,7 @@ public class AppServiceFactory : IDisposable
 {
     private readonly RedisContainer _redisContainer;
     private readonly SingletonInMemoryStoreAdapter _store;
+    private readonly SingletonIdentityAdapter _identityAdapter;
 
     public AppServiceFactory()
     {
@@ -20,6 +21,7 @@ public class AppServiceFactory : IDisposable
             .Build();
         _redisContainer.StartAsync().GetAwaiter().GetResult();
         _store = new SingletonInMemoryStoreAdapter();
+        _identityAdapter = new SingletonIdentityAdapter();
         DistributedService1 = CreateService("Distributed");
         DistributedService2 = CreateService("Distributed");
         DistributedService3 = CreateService("Distributed");
@@ -50,7 +52,7 @@ public class AppServiceFactory : IDisposable
         IConfiguration configuration = configurationBuilder.Build();
         IServiceCollection serviceCollection = new ServiceCollection();
         serviceCollection.AddApplication();
-        serviceCollection.AddInfrastructure(configuration, _store);
+        serviceCollection.AddInfrastructure(configuration, _store, _identityAdapter);
         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
         return serviceProvider;
     }

@@ -3,7 +3,7 @@ using Kernel;
 
 namespace Infrastructure.Adapters;
 
-internal sealed class SingletonIdentityAdapter : IIdentityPort
+public sealed class SingletonIdentityAdapter : IIdentityPort
 {
     private int _currentIdentity;
 

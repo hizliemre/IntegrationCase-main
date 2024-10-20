@@ -12,11 +12,11 @@ namespace Infrastructure;
 
 public static class Registrar
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, SingletonInMemoryStoreAdapter store)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, SingletonInMemoryStoreAdapter store, SingletonIdentityAdapter identityAdapter)
     {
         services.AddScoped<IRetrievePort>(_ => store);
         services.AddScoped<IPersistencyPort>(_ => store);
-        services.AddSingleton<IIdentityPort, SingletonIdentityAdapter>();
+        services.AddSingleton<IIdentityPort>(identityAdapter);
         services.AddScoped<IItemOperationBackendService, ItemOperationBackendService>();
         string serviceType = configuration["ServiceType"]!;
         switch (serviceType)
